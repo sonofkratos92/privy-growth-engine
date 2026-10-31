@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>90-Second Video Teleprompter &amp; Recorder for Privy.pro</title>
+  <style>
+    :root {
+      --bg: #060a12;
+      --panel: #111a2e;
+      --border: #243556;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --green: #10b981;
+      --red: #ef4444;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .studio-bar {
+      background: var(--panel);
+      border-bottom: 2px solid var(--border);
+      padding: 12px 20px;
+      display: grid;
+      grid-template-columns: 300px 1fr 290px;
+      gap: 18px;
+      align-items: center;
+    }
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .btn-row {
+      display: flex;
+      gap: 8px;
+    }
+    button {
+      padding: 9px 13px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 700;
+      font-size: 12.5px;
+      cursor: pointer;
+    }
+    .btn-screen { background: var(--accent); color: #06101e; }
+    .btn-cam { background: #1e293b; color: #e2e8f0; border: 1px solid var(--border); }
+    .btn-stop { background: var(--red); color: #fff; display: none; }
+    .timer-badge {
+      font-family: Consolas, monospace;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--green);
+    }
+    .teleprompter {
+      background: #090f1d;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 14px;
+      line-height: 1.45;
+      max-height: 125px;
+      overflow-y: auto;
+    }
+    .teleprompter .cue {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 11.5px;
+      text-transform: uppercase;
+      display: block;
+      margin-top: 6px;
+    }
+    .teleprompter .cue:first-child { margin-top: 0; }
+    .download-area {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .dl-link {
+      display: none;
+      background: var(--green);
+      color: #04130d;
+      text-align: center;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-weight: 800;
+      text-decoration: none;
+      font-size: 13px;
+    }
+    iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="studio-bar">
+    <div class="controls">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:12px;font-weight:700;color:var(--muted);">90s INTRO STUDIO</span>
+        <span class="timer-badge" id="timerOut">00:00 / 01:30</span>
+      </div>
+      <div class="btn-row">
+        <button class="btn-screen" id="startScreenBtn">Record Screen + Mic</button>
+        <button class="btn-cam" id="startCamBtn">Webcam + Mic</button>
+        <button class="btn-stop" id="stopBtn">Stop &amp; Save Video</button>
+      </div>
+      <span id="statusText" style="font-size:11.5px;color:var(--muted);">
+        Tip: Click "Record Screen + Mic", pick this tab, and read the script while clicking the 4 tabs below.
+      </span>
+    </div>
+
+    <div class="teleprompter">
+      <span class="cue">[0:00 - 0:18] Intro &amp; Why This Role</span>
+      "Hey Scott and the Privy team — I'm Ben Long, a full-stack growth engineer based here in Colorado on Mountain Time. When I saw your Hacker News post saying you want someone who ships a working growth system every week using AI rather than just running campaigns, I decided to build and deploy a four-part Privy Growth Engine before applying."
+
+      <span class="cue">[0:18 - 0:45] Click System 01 &amp; System 02 Tabs Below</span>
+      "First, this Programmatic SEO and AEO engine turns Privy's live city and ZIP comp velocity into indexable market pages with Dataset JSON-LD and llms.txt so ChatGPT and Perplexity cite Privy when investors search where to flip. Second, when they click any ZIP code, this interactive Fix-and-Flip MAO and BRRRR calculator computes their exact maximum offer and shows how many live Privy deals match their buy box."
+
+      <span class="cue">[0:45 - 1:12] Click System 03 &amp; System 04 Tabs Below</span>
+      "Third, the Data-to-Video module takes those exact submarket spreads and outputs a 45-second vertical reel script and Remotion render payload so we can batch-produce data-backed video content every week. And fourth, every slider interaction fires a structured intent payload into HubSpot and Clay to trigger a personalized deal-alert email sequence."
+
+      <span class="cue">[1:12 - 1:25] Close</span>
+      "I use AI coding agents every day to take ideas from zero to deployed software in hours. The live link is in my application — I'd love to jump into the paid trial and start shipping systems like this with you."
+    </div>
+
+    <div class="download-area">
+      <a id="downloadLink" class="dl-link" download="Ben-Long-Privy-90s-Intro.webm">Download Recorded Video (.webm)</a>
+      <video id="camPreview" autoplay muted playsinline style="display:none;width:100%;max-height:70px;border-radius:6px;background:#000;"></video>
+      <div>
+        After saving: upload to <strong>Google Drive</strong> (set Share -> "Anyone with the link"), <strong>Unlisted YouTube</strong>, or <strong>Loom</strong>, and paste the link into Question #8 on the Notion form.
+      </div>
+    </div>
+  </div>
+
+  <iframe src="./index.html" title="Privy.pro AI Growth Engine"></iframe>
+
+  <script>
+    let recorder = null;
+    let chunks = [];
+    let timerInterval = null;
+    let seconds = 0;
+
+    function formatTime(s) {
+      const m = String(Math.floor(s / 60)).padStart(2, '0');
+      const sec = String(s % 60).padStart(2, '0');
+      return `${m}:${sec} / 01:30`;
+    }
+
+    async function startRecording(mode) {
+      try {
+        chunks = [];
+        let stream;
+        if (mode === 'screen') {
+          const displayStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+          try {
+            const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            stream = new MediaStream([
+              ...displayStream.getVideoTracks(),
+              ...micStream.getAudioTracks()
+            ]);
+          } catch {
+            stream = displayStream;
+          }
+        } else {
+          stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+          const camVid = document.getElementById('camPreview');
+          camVid.srcObject = stream;
+          camVid.style.display = 'block';
+        }
+
+        recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+        recorder.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) chunks.push(e.data);
+        };
+        recorder.onstop = () => {
+          clearInterval(timerInterval);
+          stream.getTracks().forEach((t) => t.stop());
+          document.getElementById('camPreview').style.display = 'none';
+          const blob = new Blob(chunks, { type: 'video/webm' });
+          const url = URL.createObjectURL(blob);
+          const dl = document.getElementById('downloadLink');
+          dl.href = url;
+          dl.style.display = 'block';
+          document.getElementById('stopBtn').style.display = 'none';
+          document.getElementById('startScreenBtn').style.display = 'inline-block';
+          document.getElementById('startCamBtn').style.display = 'inline-block';
+          document.getElementById('statusText').textContent = 'Recording complete! Click green button on the right to save.';
+        };
+
+        recorder.start(250);
+        seconds = 0;
+        document.getElementById('timerOut').textContent = formatTime(0);
+        timerInterval = setInterval(() => {
+          seconds++;
+          document.getElementById('timerOut').textContent = formatTime(seconds);
+          if (seconds >= 90 && recorder && recorder.state === 'recording') {
+            recorder.stop();
+          }
+        }, 1000);
+
+        document.getElementById('startScreenBtn').style.display = 'none';
+        document.getElementById('startCamBtn').style.display = 'none';
+        document.getElementById('stopBtn').style.display = 'inline-block';
+        document.getElementById('downloadLink').style.display = 'none';
+        document.getElementById('statusText').textContent = 'Recording live... Read the teleprompter & click the 4 tabs below!';
+      } catch (err) {
+        document.getElementById('statusText').textContent = 'Permission cancelled or mic/screen unavailable: ' + err.message;
+      }
+    }
+
+    document.getElementById('startScreenBtn').addEventListener('click', () => startRecording('screen'));
+    document.getElementById('startCamBtn').addEventListener('click', () => startRecording('cam'));
+    document.getElementById('stopBtn').addEventListener('click', () => {
+      if (recorder && recorder.state === 'recording') recorder.stop();
+    });
+  </script>
+</body>
+</html>
