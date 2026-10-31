@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privy.pro — Always-On AI Growth Engine (Interactive System Prototype by Ben Long)</title>
+  <meta name="description" content="End-to-end AI growth system built for Privy.pro: Programmatic SEO/AEO Market Pages, Interactive MAO & BRRRR Deal Analyzer, Automated Data-to-Video Pipeline, and HubSpot/Clay Outbound Attribution." />
+  <script id="dynamicJsonLd" type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    "name": "Privy.pro Residential Investor Activity & ARV Spread Index (Q4 2026)",
+    "description": "Real-time residential investor transaction velocity, median purchase-to-ARV discount, and renovation hold durations across major US metros.",
+    "creator": {
+      "@type": "Organization",
+      "name": "Privy.pro",
+      "url": "https://privy.pro"
+    }
+  }
+  </script>
+  <style>
+    :root {
+      --bg: #080d18;
+      --panel: #10192b;
+      --panel-alt: #16223a;
+      --panel-hover: #1c2b48;
+      --border: #233454;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.13);
+      --green: #10b981;
+      --green-soft: rgba(16, 185, 129, 0.14);
+      --amber: #f59e0b;
+      --purple: #a78bfa;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding-bottom: 60px;
+    }
+    .header-bar {
+      background: rgba(16, 25, 43, 0.92);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+    }
+    .header-inner {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-logo {
+      font-weight: 800;
+      font-size: 19px;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+    .brand-logo span { color: var(--accent); }
+    .tag-pill {
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 99px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    .market-selector {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .market-selector select {
+      background: var(--panel-alt);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .container {
+      max-width: 1260px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    /* System Architecture Nav Tabs */
+    .nav-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .tab-btn {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 13px 16px;
+      border-radius: 11px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.16s ease;
+    }
+    .tab-btn:hover {
+      background: var(--panel-alt);
+      color: var(--text);
+    }
+    .tab-btn.active {
+      background: var(--panel-alt);
+      border-color: var(--accent);
+      color: var(--text);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.25);
+    }
+    .tab-num {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 3px;
+    }
+    .tab-title {
+      font-size: 14px;
+      font-weight: 700;
+      display: block;
+    }
+    .tab-sub {
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 22px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+    }
+    .card h2 {
+      font-size: 20px;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+    .card-desc {
+      font-size: 13.5px;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .kpi-box {
+      background: var(--panel-alt);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 13px 14px;
+    }
+    .kpi-label {
+      font-size: 11.5px;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .kpi-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text);
+    }
+    .kpi-delta {
+      font-size: 11.5px;
+      color: var(--green);
+      font-weight: 600;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+    th {
+      text-align: left;
+      color: var(--muted);
+      font-weight: 600;
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    td {
+      padding: 10px;
+      border-bottom: 1px solid rgba(35, 52, 84, 0.65);
+    }
+    tr.zip-row { cursor: pointer; transition: background 0.12s; }
+    tr.zip-row:hover { background: var(--panel-hover); }
+    .signal-pill {
+      display: inline-block;
+      background: var(--green-soft);
+      color: var(--green);
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .code-box {
+      background: #070b14;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12px;
+      color: #cbd5e1;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+    /* Calculator controls */
+    .mode-switch {
+      display: inline-flex;
+      background: var(--panel-alt);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 3px;
+      margin-bottom: 16px;
+    }
+    .mode-btn {
+      background: transparent;
+      color: var(--muted);
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .mode-btn.active {
+      background: var(--accent);
+      color: #06101e;
+    }
+    .slider-group { margin-bottom: 14px; }
+    .slider-group label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+    .slider-group label strong { color: var(--text); }
+    input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+    .result-banner {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.16), rgba(56, 189, 248, 0.1));
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+    .result-label {
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .result-big {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--green);
+      margin: 4px 0;
+    }
+    .btn-primary {
+      width: 100%;
+      background: var(--accent);
+      color: #06101e;
+      font-weight: 700;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.92; }
+    .script-step {
+      background: var(--panel-alt);
+      border-left: 3px solid var(--accent);
+      border-radius: 6px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+    }
+    .script-step .time {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+    .script-step p {
+      font-size: 13px;
+      margin-top: 4px;
+      color: var(--text);
+    }
+    .journey-node {
+      background: var(--panel-alt);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .journey-node h4 {
+      font-size: 13.5px;
+      margin-bottom: 4px;
+      color: var(--accent);
+    }
+    .journey-node p {
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+    @media (max-width: 920px) {
+      .nav-tabs, .grid-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header-bar">
+    <div class="header-inner">
+      <div class="brand-row">
+        <div class="brand-logo">PRIVY<span>.PRO</span></div>
+        <span class="tag-pill">Always-On AI Growth Engine Prototype • Built by Ben Long</span>
+      </div>
+      <div class="market-selector">
+        <span>Active Target Market:</span>
+        <select id="marketSelect">
+          <option value="denver">Denver Metro, CO (Mountain)</option>
+          <option value="phoenix">Phoenix / Maricopa, AZ</option>
+          <option value="atlanta">Atlanta Metro, GA</option>
+          <option value="dallas">Dallas-Fort Worth, TX</option>
+          <option value="tampa">Tampa Bay, FL</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- 4 Growth Engine Modules matching Privy.pro JD -->
+    <div class="nav-tabs" role="tablist">
+      <button class="tab-btn active" data-tab="tab-seo">
+        <span class="tab-num">System 01 • SEO &amp; AEO</span>
+        <span class="tab-title">Programmatic Market Pages</span>
+        <span class="tab-sub">Live ZIP comps + AI citation schema</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-calc">
+        <span class="tab-num">System 02 • Conversion</span>
+        <span class="tab-title">Interactive Deal &amp; MAO Engine</span>
+        <span class="tab-sub">Fix &amp; Flip + BRRRR lead capture</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-video">
+        <span class="tab-num">System 03 • Content &amp; Video</span>
+        <span class="tab-title">Data-to-Reels Generator</span>
+        <span class="tab-sub">Turns ZIP spreads into 45s scripts</span>
+      </button>
+      <button class="tab-btn" data-tab="tab-outbound">
+        <span class="tab-num">System 04 • Lifecycle &amp; Attribution</span>
+        <span class="tab-title">Clay / HubSpot Journey Sync</span>
+        <span class="tab-sub">Intent payload &amp; email sequence</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: Programmatic SEO + AEO -->
+    <section id="tab-seo" class="tab-pane active">
+      <div class="grid-2">
+        <div class="card">
+          <h2 id="marketHeading">Denver, CO Live Investor Activity &amp; ARV Spreads</h2>
+          <p class="card-desc">
+            Programmatic city &amp; ZIP landing template engineered to capture high-intent organic search and AI Answer Engine citations ("best ZIP codes to flip houses in <span class="m-name">Denver</span> 2026"). Click any ZIP row to sync the calculator &amp; video script.
+          </p>
+
+          <div class="kpi-grid">
+            <div class="kpi-box">
+              <span class="kpi-label">Active Fix &amp; Flip Comps</span>
+              <div class="kpi-val" id="kpiComps">142</div>
+              <span class="kpi-delta" id="kpiCompsDelta">+18% vs. 30d avg</span>
+            </div>
+            <div class="kpi-box">
+              <span class="kpi-label">Median Purchase-to-ARV</span>
+              <div class="kpi-val" id="kpiArvRatio">68.4%</div>
+              <span class="kpi-delta" id="kpiSpread">Avg Gross Spread: $164K</span>
+            </div>
+            <div class="kpi-box">
+              <span class="kpi-label">Median Rehab Hold Days</span>
+              <div class="kpi-val" id="kpiHold">134 d</div>
+              <span class="kpi-delta" id="kpiFastest">Fastest: 80219 (98d)</span>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>ZIP / Submarket</th>
+                <th>Median Buy</th>
+                <th>Verified ARV</th>
+                <th>Investor Share</th>
+                <th>Privy Signal</th>
+              </tr>
+            </thead>
+            <tbody id="zipTableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <h2>AI Answer Engine Optimization (AEO + <code>llms.txt</code>)</h2>
+          <p class="card-desc">
+            When investors ask ChatGPT, Perplexity, or Claude where investor spreads are widest, structured <code>Dataset</code> + <code>FAQPage</code> JSON-LD and clean markdown summaries ensure Privy.pro is cited as the primary source.
+          </p>
+          <div class="code-box" id="aeoCodeBox"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: Interactive Deal & MAO Calculator -->
+    <section id="tab-calc" class="tab-pane">
+      <div class="grid-2">
+        <div class="card">
+          <div class="mode-switch">
+            <button type="button" class="mode-btn active" data-mode="flip">Fix &amp; Flip MAO</button>
+            <button type="button" class="mode-btn" data-mode="brrrr">BRRRR / Rental Cash-Flow</button>
+          </div>
+          <h2 id="calcTitle">Interactive Fix-and-Flip MAO Calculator</h2>
+          <p class="card-desc">
+            Embedded on every programmatic city page. Captures the visitor's target strategy, price ceiling, and submarket before passing them into the Privy signup flow.
+          </p>
+
+          <div class="slider-group">
+            <label><span>Verified After Repair Value (ARV)</span><strong id="arvDisplay">$550,000</strong></label>
+            <input type="range" id="arvInput" min="200000" max="1200000" step="10000" value="550000" />
+          </div>
+
+          <div class="slider-group">
+            <label><span>Estimated Renovation Budget</span><strong id="rehabDisplay">$65,000</strong></label>
+            <input type="range" id="rehabInput" min="15000" max="250000" step="5000" value="65000" />
+          </div>
+
+          <div class="slider-group">
+            <label><span id="marginLabel">Target Investor Margin + Holding/Closing</span><strong id="marginDisplay">25%</strong></label>
+            <input type="range" id="marginInput" min="15" max="35" step="1" value="25" />
+          </div>
+
+          <div class="result-banner">
+            <div class="result-label" id="resultLabel">MAXIMUM ALLOWABLE OFFER (MAO)</div>
+            <div class="result-big" id="resultValue">$347,500</div>
+            <div style="font-size:12.5px;color:#cbd5e1;" id="resultSub">
+              Target Gross Cushion (25% of ARV): <strong>$137,500</strong> • Est. Net ROI: <strong>24.1%</strong>
+            </div>
+          </div>
+
+          <button type="button" class="btn-primary" id="calcCtaBtn">
+            Unlock 14 Live Denver Deals Below $347,500 in Privy
+          </button>
+        </div>
+
+        <div class="card">
+          <h2>Real-Time Attribution &amp; Lead Qualification Payload</h2>
+          <p class="card-desc">
+            Every slider interaction updates the first-party attribution payload pushed to HubSpot / Segment / PostHog on signup so sales &amp; lifecycle journeys know the user's exact buy box.
+          </p>
+          <div class="code-box" id="attributionBox"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Data-to-Video Generator -->
+    <section id="tab-video" class="tab-pane">
+      <div class="grid-2">
+        <div class="card">
+          <h2>Automated Data-to-Video Script &amp; Storyboard Engine</h2>
+          <p class="card-desc">
+            Turns live Privy transaction velocity and ARV spread data in <strong id="videoMarketLabel">Denver (80219)</strong> into a 45-second high-retention vertical video script for Reels, TikTok, and YouTube Shorts.
+          </p>
+          <div id="videoScriptSteps"></div>
+        </div>
+
+        <div class="card">
+          <h2>Remotion / FFmpeg Data-Card Render Spec</h2>
+          <p class="card-desc">
+            Structured JSON payload fed into a headless Remotion/FFmpeg template to batch-render weekly market pulse clips automatically from Privy's database.
+          </p>
+          <div class="code-box" id="remotionSpecBox"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: Outbound & Lifecycle Journey -->
+    <section id="tab-outbound" class="tab-pane">
+      <div class="grid-2">
+        <div class="card">
+          <h2>Behavior-Triggered Investor &amp; Agent Email Journey</h2>
+          <p class="card-desc">
+            Instead of generic drip emails, user inputs from the programmatic page &amp; calculator dynamically populate a 4-touch lifecycle sequence tailored to their exact ZIP and MAO ceiling.
+          </p>
+          <div id="journeyNodes"></div>
+        </div>
+
+        <div class="card">
+          <h2>Generated Day-0 Personalized Email Preview</h2>
+          <p class="card-desc">
+            Live preview of the automated plain-text email triggered immediately when an investor runs a calculation in <strong class="m-name">Denver</strong>.
+          </p>
+          <div class="code-box" id="emailPreviewBox"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const MARKETS = {
+      denver: {
+        name: 'Denver, CO',
+        short: 'Denver',
+        comps: 142,
+        compsDelta: '+18% vs. 30d avg',
+        arvRatio: '68.4%',
+        spread: 'Avg Gross Spread: $164K',
+        hold: '134 d',
+        fastest: 'Fastest: 80219 (98d)',
+        defaultArv: 550000,
+        defaultRehab: 65000,
+        dealCount: 14,
+        zips: [
+          { zip: '80219', area: 'Barnum / Westwood', buy: 348000, arv: 525000, share: '21.4%', signal: 'High Flip Velocity', holdDays: 98 },
+          { zip: '80220', area: 'East Colfax / Mayfair', buy: 465000, arv: 690000, share: '18.9%', signal: 'Strong ARV Margin', holdDays: 119 },
+          { zip: '80010', area: 'North Aurora', buy: 315000, arv: 472000, share: '16.2%', signal: 'Fast Exit DOM', holdDays: 112 },
+          { zip: '80214', area: 'Edgewater / Lakewood', buy: 410000, arv: 595000, share: '14.7%', signal: 'BTR + Flip Active', holdDays: 128 }
+        ]
+      },
+      phoenix: {
+        name: 'Phoenix Metro, AZ',
+        short: 'Phoenix',
+        comps: 218,
+        compsDelta: '+24% vs. 30d avg',
+        arvRatio: '69.8%',
+        spread: 'Avg Gross Spread: $148K',
+        hold: '121 d',
+        fastest: 'Fastest: 85033 (89d)',
+        defaultArv: 480000,
+        defaultRehab: 55000,
+        dealCount: 22,
+        zips: [
+          { zip: '85033', area: 'Maryvale / West Phoenix', buy: 262000, arv: 395000, share: '24.8%', signal: 'High Flip Velocity', holdDays: 89 },
+          { zip: '85204', area: 'Central Mesa', buy: 318000, arv: 468000, share: '19.5%', signal: 'Low Rehab Hold', holdDays: 104 },
+          { zip: '85301', area: 'Glendale Downtown', buy: 279000, arv: 415000, share: '17.9%', signal: 'Strong Rental + Flip', holdDays: 115 },
+          { zip: '85016', area: 'Camelback East', buy: 510000, arv: 765000, share: '15.2%', signal: 'High Dollar Spread', holdDays: 132 }
+        ]
+      },
+      atlanta: {
+        name: 'Atlanta Metro, GA',
+        short: 'Atlanta',
+        comps: 264,
+        compsDelta: '+29% vs. 30d avg',
+        arvRatio: '64.2%',
+        spread: 'Avg Gross Spread: $152K',
+        hold: '129 d',
+        fastest: 'Fastest: 30318 (94d)',
+        defaultArv: 430000,
+        defaultRehab: 60000,
+        dealCount: 27,
+        zips: [
+          { zip: '30318', area: 'West Midtown / Grove Park', buy: 245000, arv: 410000, share: '26.1%', signal: 'Top ARV Cushion', holdDays: 94 },
+          { zip: '30310', area: 'West End / Adair Park', buy: 238000, arv: 392000, share: '23.4%', signal: 'High Investor Share', holdDays: 108 },
+          { zip: '30032', area: 'Belvedere / Candler-McAfee', buy: 215000, arv: 348000, share: '20.7%', signal: 'BRRRR + Flip Hotspot', holdDays: 116 },
+          { zip: '30315', area: 'Peoplestown / Chosewood', buy: 252000, arv: 405000, share: '18.3%', signal: 'Fast Resale Velocity', holdDays: 121 }
+        ]
+      },
+      dallas: {
+        name: 'Dallas-Fort Worth, TX',
+        short: 'DFW',
+        comps: 310,
+        compsDelta: '+21% vs. 30d avg',
+        arvRatio: '67.1%',
+        spread: 'Avg Gross Spread: $139K',
+        hold: '118 d',
+        fastest: 'Fastest: 75216 (86d)',
+        defaultArv: 420000,
+        defaultRehab: 55000,
+        dealCount: 31,
+        zips: [
+          { zip: '75216', area: 'Cedar Crest / South Oak Cliff', buy: 198000, arv: 325000, share: '25.3%', signal: 'Fastest Turnaround', holdDays: 86 },
+          { zip: '76119', area: 'Southeast Fort Worth', buy: 185000, arv: 298000, share: '22.0%', signal: 'High Volume Comps', holdDays: 99 },
+          { zip: '75040', area: 'North Garland', buy: 268000, arv: 395000, share: '17.8%', signal: 'Tight Retail DOM', holdDays: 107 },
+          { zip: '75228', area: 'Casa View / East Dallas', buy: 292000, arv: 445000, share: '16.5%', signal: 'Strong Rehab Upside', holdDays: 118 }
+        ]
+      },
+      tampa: {
+        name: 'Tampa Bay, FL',
+        short: 'Tampa',
+        comps: 176,
+        compsDelta: '+16% vs. 30d avg',
+        arvRatio: '67.9%',
+        spread: 'Avg Gross Spread: $144K',
+        hold: '126 d',
+        fastest: 'Fastest: 33604 (92d)',
+        defaultArv: 445000,
+        defaultRehab: 55000,
+        dealCount: 18,
+        zips: [
+          { zip: '33604', area: 'Seminole Heights / Sulphur Springs', buy: 265000, arv: 415000, share: '22.6%', signal: 'High Flip Velocity', holdDays: 92 },
+          { zip: '33705', area: 'South St. Petersburg', buy: 278000, arv: 432000, share: '19.8%', signal: 'Strong ARV Spread', holdDays: 109 },
+          { zip: '33612', area: 'North Tampa / Forest Hills', buy: 242000, arv: 372000, share: '18.1%', signal: 'BRRRR Cash-Flow', holdDays: 117 },
+          { zip: '33511', area: 'Brandon Core', buy: 295000, arv: 435000, share: '15.4%', signal: 'Low Retail Inventory', holdDays: 124 }
+        ]
+      }
+    };
+
+    let currentMarketKey = 'denver';
+    let selectedZipIndex = 0;
+    let calcMode = 'flip';
+    const fmt = (n) => '$' + Math.round(Number(n)).toLocaleString('en-US');
+
+    function renderAll() {
+      const m = MARKETS[currentMarketKey];
+      const z = m.zips[selectedZipIndex] || m.zips[0];
+
+      document.querySelectorAll('.m-name').forEach((el) => (el.textContent = m.short));
+      document.getElementById('marketHeading').textContent = `${m.name} Live Investor Activity & ARV Spreads`;
+      document.getElementById('kpiComps').textContent = m.comps;
+      document.getElementById('kpiCompsDelta').textContent = m.compsDelta;
+      document.getElementById('kpiArvRatio').textContent = m.arvRatio;
+      document.getElementById('kpiSpread').textContent = m.spread;
+      document.getElementById('kpiHold').textContent = m.hold;
+      document.getElementById('kpiFastest').textContent = m.fastest;
+
+      const tbody = document.getElementById('zipTableBody');
+      tbody.innerHTML = m.zips
+        .map(
+          (row, idx) => `
+        <tr class="zip-row" data-idx="${idx}" style="${idx === selectedZipIndex ? 'background:rgba(56,189,248,0.1);' : ''}">
+          <td><strong>${row.zip}</strong> (${row.area})</td>
+          <td>${fmt(row.buy)}</td>
+          <td>${fmt(row.arv)}</td>
+          <td>${row.share}</td>
+          <td><span class="signal-pill">${row.signal}</span></td>
+        </tr>`
+        )
+        .join('');
+
+      tbody.querySelectorAll('.zip-row').forEach((tr) => {
+        tr.addEventListener('click', () => {
+          selectedZipIndex = Number(tr.dataset.idx);
+          const picked = m.zips[selectedZipIndex];
+          document.getElementById('arvInput').value = picked.arv;
+          renderAll();
+        });
+      });
+
+      // Calculator math
+      const arv = Number(document.getElementById('arvInput').value);
+      const rehab = Number(document.getElementById('rehabInput').value);
+      const margin = Number(document.getElementById('marginInput').value) / 100;
+
+      document.getElementById('arvDisplay').textContent = fmt(arv);
+      document.getElementById('rehabDisplay').textContent = fmt(rehab);
+      document.getElementById('marginDisplay').textContent = Math.round(margin * 100) + '%';
+
+      const mao = Math.max(0, Math.round(arv * (1 - margin) - rehab));
+      const cushion = Math.round(arv - mao - rehab);
+      const estRent = Math.round(arv * 0.0078);
+
+      if (calcMode === 'flip') {
+        document.getElementById('calcTitle').textContent = `Interactive Fix-and-Flip MAO Calculator (${z.zip})`;
+        document.getElementById('resultLabel').textContent = `MAXIMUM ALLOWABLE OFFER (MAO) IN ${z.zip}`;
+        document.getElementById('resultValue').textContent = fmt(mao);
+        document.getElementById('resultSub').innerHTML = `Target Gross Cushion (${Math.round(margin * 100)}% of ARV): <strong>${fmt(cushion)}</strong> • Median Hold in ${z.zip}: <strong>${z.holdDays} days</strong>`;
+      } else {
+        const refiLoan = Math.round(arv * 0.75);
+        const cashLeft = Math.max(0, mao + rehab - refiLoan);
+        document.getElementById('calcTitle').textContent = `BRRRR Refinance & Cash-Flow Analyzer (${z.zip})`;
+        document.getElementById('resultLabel').textContent = `75% LTV REFI CASHOUT CEILING (${z.zip})`;
+        document.getElementById('resultValue').textContent = fmt(refiLoan);
+        document.getElementById('resultSub').innerHTML = `Est. Monthly Rent: <strong>${fmt(estRent)}/mo</strong> • Capital Left in Deal at ${fmt(mao)} Buy: <strong>${fmt(cashLeft)}</strong>`;
+      }
+
+      document.getElementById('calcCtaBtn').textContent = `Unlock ${m.dealCount} Live ${m.short} Deals Below ${fmt(mao)} in Privy`;
+
+      // AEO + Schema Box
+      const aeoObj = {
+        '@context': 'https://schema.org',
+        '@type': 'Dataset',
+        name: `${m.name} Residential Fix-and-Flip & ARV Spread Index (Q4 2026)`,
+        creator: { '@type': 'Organization', name: 'Privy.pro', url: 'https://privy.pro' },
+        spatialCoverage: `${m.name} (Top ZIP: ${z.zip} - ${z.area})`,
+        variableMeasured: [
+          { name: 'Active Investor Comps', value: m.comps },
+          { name: 'Median Purchase-to-ARV Ratio', value: m.arvRatio },
+          { name: `ZIP ${z.zip} Median Acquisition`, value: fmt(z.buy) },
+          { name: `ZIP ${z.zip} Verified ARV`, value: fmt(z.arv) }
+        ]
+      };
+      document.getElementById('aeoCodeBox').textContent =
+        `# /llms.txt & AI Answer Engine Summary (${m.name})\n` +
+        `> Source: Privy.pro Live Investor Intelligence (${m.comps} active verified comps)\n` +
+        `> Top Velocity Submarket: ZIP ${z.zip} (${z.area}) — Median Buy ${fmt(z.buy)} vs. Verified ARV ${fmt(z.arv)} (${z.share} investor purchase share, ${z.holdDays}d median hold).\n\n` +
+        `// Embedded JSON-LD Schema:\n` +
+        JSON.stringify(aeoObj, null, 2);
+
+      // Attribution payload
+      const attrPayload = {
+        event: 'growth_calculator_intent_captured',
+        timestamp: new Date().toISOString(),
+        source_channel: 'programmatic_seo_market_pulse',
+        market_slug: currentMarketKey,
+        selected_zip: z.zip,
+        submarket_name: z.area,
+        investor_strategy: calcMode === 'flip' ? 'fix_and_flip' : 'brrrr_rental',
+        target_arv_usd: arv,
+        est_rehab_usd: rehab,
+        calculated_mao_usd: mao,
+        matching_privy_deals: m.dealCount,
+        hubspot_lifecycle_trigger: `seq_${currentMarketKey}_${calcMode}_alert`
+      };
+      document.getElementById('attributionBox').textContent = JSON.stringify(attrPayload, null, 2);
+
+      // Video Script
+      const spreadDol = z.arv - z.buy;
+      document.getElementById('videoMarketLabel').textContent = `${m.short} (ZIP ${z.zip} - ${z.area})`;
+      document.getElementById('videoScriptSteps').innerHTML = `
+        <div class="script-step">
+          <span class="time">0:00 - 0:04 • Pattern-Interrupt Hook (On-Screen Map Overlay)</span>
+          <p>"Investors in ${m.short} are quietly pulling ${fmt(spreadDol)} gross spreads in one specific ZIP code right now — and it's not where retail buyers are looking."</p>
+        </div>
+        <div class="script-step">
+          <span class="time">0:04 - 0:16 • Live Privy Data Proof</span>
+          <p>"We pulled all ${m.comps} active fix-and-flip comps in ${m.name} inside Privy. Look at ZIP code <strong>${z.zip} (${z.area})</strong>: investors account for ${z.share} of purchases, buying at a median of ${fmt(z.buy)} and exiting at a verified ARV of ${fmt(z.arv)}."</p>
+        </div>
+        <div class="script-step">
+          <span class="time">0:16 - 0:32 • Deal Math &amp; Hold Velocity</span>
+          <p>"Even after a ${fmt(rehab)} rehab budget, flips in ${z.zip} are turning around in ${z.holdDays} median days. To hit a ${Math.round(margin * 100)}% gross cushion on a ${fmt(arv)} ARV, your Maximum Allowable Offer is <strong>${fmt(mao)}</strong>."</p>
+        </div>
+        <div class="script-step">
+          <span class="time">0:32 - 0:45 • Direct Conversion CTA</span>
+          <p>"Privy is tracking ${m.dealCount} live properties in ${m.short} priced below ${fmt(mao)} right now. Comment <strong>${z.zip}</strong> or hit the link in bio to run the live comps yourself."</p>
+        </div>
+      `;
+
+      document.getElementById('remotionSpecBox').textContent = JSON.stringify(
+        {
+          template_id: 'privy-zip-velocity-reel-9x16',
+          fps: 30,
+          duration_seconds: 45,
+          props: {
+            metro: m.name,
+            highlight_zip: z.zip,
+            submarket: z.area,
+            median_buy: fmt(z.buy),
+            verified_arv: fmt(z.arv),
+            gross_spread: fmt(spreadDol),
+            investor_share: z.share,
+            median_hold_days: z.holdDays,
+            calculated_mao: fmt(mao),
+            live_matching_deals: m.dealCount
+          }
+        },
+        null,
+        2
+      );
+
+      // Journey Nodes & Email Preview
+      document.getElementById('journeyNodes').innerHTML = `
+        <div class="journey-node">
+          <h4>Touch 1 (Instant / Minute 0): Custom Buy-Box Comps Alert</h4>
+          <p>Triggered when user calculates ${fmt(mao)} MAO in ${z.zip}. Sends 3 anonymized live deal spreads in ${z.area} + direct magic link into Privy filtered to ${z.zip}.</p>
+        </div>
+        <div class="journey-node">
+          <h4>Touch 2 (Hour 24): Submarket Rehab &amp; Hold-Time Breakdown</h4>
+          <p>Compares ${z.zip} (${z.holdDays}d median hold) against adjacent ${m.short} ZIPs so the investor sees how Privy tracks before-and-after renovation photos.</p>
+        </div>
+        <div class="journey-node">
+          <h4>Touch 3 (Day 3): Price-Drop / Failed-Listing Trigger</h4>
+          <p>Automated webhook check: alerts the prospect when an active listing in ${z.zip} drops within 5% of their ${fmt(mao)} MAO ceiling.</p>
+        </div>
+      `;
+
+      document.getElementById('emailPreviewBox').textContent =
+`Subject: ${m.dealCount} live ${m.short} properties under your ${fmt(mao)} MAO ceiling (ZIP ${z.zip})
+
+Hey {{contact.firstname | default: "there"}},
+
+You just ran the ${m.name} Fix-and-Flip calculator for ZIP ${z.zip} (${z.area}) with:
+- Target ARV: ${fmt(arv)}
+- Rehab Budget: ${fmt(rehab)}
+- Maximum Allowable Offer (MAO): ${fmt(mao)}
+
+Right now inside Privy, there are ${m.dealCount} active & off-market properties across ${m.short} trading below ${fmt(mao)} where verified renovated comps support ${fmt(z.arv)}+ ARVs.
+
+In ${z.zip} specifically, investors are closing ${z.share} of transactions with a median turnaround of ${z.holdDays} days.
+
+Click below to open your pre-filtered ${z.zip} deal feed in Privy (with full before/after flip history and exact investor buyer names):
+https://privy.pro/deals?market=${currentMarketKey}&zip=${z.zip}&max_price=${mao}&strategy=${calcMode}
+
+— The Privy.pro Deal Intelligence Team`;
+    }
+
+    document.getElementById('marketSelect').addEventListener('change', (e) => {
+      currentMarketKey = e.target.value;
+      selectedZipIndex = 0;
+      const m = MARKETS[currentMarketKey];
+      document.getElementById('arvInput').value = m.defaultArv;
+      document.getElementById('rehabInput').value = m.defaultRehab;
+      renderAll();
+    });
+
+    ['arvInput', 'rehabInput', 'marginInput'].forEach((id) => {
+      document.getElementById(id).addEventListener('input', renderAll);
+    });
+
+    document.querySelectorAll('.mode-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mode-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        calcMode = btn.dataset.mode;
+        renderAll();
+      });
+    });
+
+    document.querySelectorAll('.tab-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach((p) => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    renderAll();
+  </script>
+</body>
+</html>
